@@ -47,7 +47,7 @@ export class AppComponent {
             } else if (item.clickType === 'DOUBLE') {
                 clickType = 'Product 2'
             } else if (item.clickType === 'LONG') {
-                clickType = 'Double Production'
+                clickType = 'Product 1 & 2'
             }
 
             temp.push(new ProductionItem(item.id, this.datePipe.transform(item.timestamp, "MMM d, h:mm a"), clickType))
