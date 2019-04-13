@@ -11,66 +11,56 @@ import { ProductionItem } from '../productionModel';
 
 export class ChartComponent implements AfterViewInit {
 
-    @Input('production') production: ProductionItem[]
+    @Input('production') production: ProductionItem[];
 
     chart: any;
     canvas: any;
     ctx: any;
     datePipe = new DatePipe('en-US');
-    labels = []
-    product1 = []
-    product2 = []
-    productBoth = []
+    labels = [];
+    product1 = [];
+    product2 = [];
+    productBoth = [];
 
     constructor(private cdr: ChangeDetectorRef) { }
 
-    // ngOnInit() {
-
-    // }
-
     setData() {
-        console.log("SET DATA")
-        console.log(this.production)
-        let temp: ProductionItem[] = []
+        const temp: ProductionItem[] = [];
         this.production.forEach(item => {
-            temp.push(new ProductionItem(item.id, this.datePipe.transform(item.timestamp, 'MMM d'), item.clickType))
+            temp.push(new ProductionItem(item.id, this.datePipe.transform(item.timestamp, 'MMM d'), item.clickType));
         });
 
-        console.log("For each DATA")
-        console.log(this.production)
-
-        var groupBy = function (xs, key) {
+        const groupBy = (xs, key) => {
             return xs.reduce(function (rv, x) {
                 (rv[x[key]] = rv[x[key]] || []).push(x);
                 return rv;
             }, {});
         };
 
-        let groupedData = groupBy(temp, "timestamp")
+        const groupedData = groupBy(temp, 'timestamp');
         Object.keys(groupedData).forEach(date => {
-            this.labels.push(date)
-            var p1 = 0
-            var p2 = 0
-            var pB = 0
+            this.labels.push(date);
+            let prod1 = 0;
+            let prod2 = 0;
+            let prodBoth = 0;
             groupedData[date].forEach(item => {
                 if (item.clickType === 'SINGLE') {
-                    p1++
+                    prod1++;
                 } else if (item.clickType === 'DOUBLE') {
-                    p2++
+                    prod2++;
                 } else if (item.clickType === 'LONG') {
-                    pB++
+                    prodBoth++;
                 }
             });
 
-            this.product1.push(p1)
-            this.product2.push(p2)
-            this.productBoth.push(pB)
+            this.product1.push(prod1);
+            this.product2.push(prod2);
+            this.productBoth.push(prodBoth);
         });
     }
 
     ngAfterViewInit() {
-        this.setData()
-
+        this.setData();
         this.canvas = document.getElementById('stackedChart');
         this.ctx = this.canvas.getContext('2d');
         this.chart = new Chart(this.ctx, {

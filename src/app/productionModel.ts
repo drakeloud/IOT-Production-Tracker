@@ -11,12 +11,12 @@ export class ProductionItem {
             return null;
         }
 
-        let productionItem = new ProductionItem(
+        const productionItem = new ProductionItem(
             result.id,
             result.timestamp,
             result.payload.clickType
-        )
+        );
 
-        return productionItem
+        return productionItem;
     }
 }
